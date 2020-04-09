@@ -1,8 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const server = express();
 const routes = require("./routes");
-const cors = require("cors");
 
 mongoose.connect("mongodb+srv://lucianocosta:kelvilu2020@cluster0-sampm.mongodb.net/omnistack8?retryWrites=true&w=majority", 
 {
@@ -10,7 +10,7 @@ mongoose.connect("mongodb+srv://lucianocosta:kelvilu2020@cluster0-sampm.mongodb.
     useUnifiedTopology: true
 });
 
-server.use(cors());
+server.use(cors({origin: true, credentials: true}));
 server.use(express.json());
 server.use(routes);
 

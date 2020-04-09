@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { AsyncStorage } from 'react-native'
 import { KeyboardAvoidingView, Platform, StyleSheet, Image, TextInput, Text, TouchableOpacity } from 'react-native'
 
 import api from '../services/api';
@@ -7,11 +8,20 @@ import Logo from '../Img/logo.png';
 export default function Login({ navigation }){
     const [user, setUser] = useState('');
     
+    useState(() => {
+        AsyncStorage.getItem('user').then(user => {
+            if(user){
+                navigation.navigate('Main', _id);
+            }
+        })
+    })
+
     async function handleLoad(){
         const response = await api.post('/devs', { username: user });
         const { _id } = response.data;
        
-        navigation.navigate('Main', { _id });
+        await AsyncStorage.setItem('user', _id );
+        navigation.navigate('Main', { user: _id });
     }
 
     return (
