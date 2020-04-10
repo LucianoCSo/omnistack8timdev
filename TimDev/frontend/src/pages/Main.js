@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import io from "socket.io-client";
 import logo from "../Img/logo.png";
 import like from "../Img/like.png";
 import deslike from "../Img/dislike.png";
@@ -20,6 +21,16 @@ export default function Main({ match }){
         LoadUser();
     }, [match.params.id]);
     
+    useEffect(() => {
+        const socket = io("http://localhost:3331", {
+            query: { user: match.params.id }
+        });
+        
+        socket.on('match', dev => {
+            console.log(dev);
+        })
+    }, [match.params.id]);
+
     async function hendleLike(id){
         await api.post(`devs/${id}/likes`, null, {
             headers: { user: match.params.id }
